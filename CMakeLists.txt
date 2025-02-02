@@ -14,13 +14,17 @@ find_package(OpenSSL REQUIRED)
 # Print OpenSSL include directory for debugging
 message(STATUS "OpenSSL include dir: ${OPENSSL_INCLUDE_DIR}")
 
-# Add executable and source files
-add_executable(blockchain src/blockchain.cpp)
-
-# Include directories for external libraries
-target_include_directories(blockchain PRIVATE
+# Include directories
+include_directories(
     ${OPENSSL_INCLUDE_DIR}               # OpenSSL headers
-    ${CMAKE_CURRENT_SOURCE_DIR}/include  # Include manually downloaded json.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/include  # Manually downloaded json.hpp headers
+)
+
+# Add executable and source files (use main.cpp as the main file)
+add_executable(blockchain 
+    src/main.cpp  # Updated to point to main.cpp
+    src/blockchain.cpp  # Other source files, if any
+    src/block.cpp
 )
 
 # Link libraries
@@ -28,3 +32,6 @@ target_link_libraries(blockchain PRIVATE
     OpenSSL::SSL
     OpenSSL::Crypto
 )
+
+# Optionally, if your project requires installation, you can include install rules
+# install(TARGETS blockchain DESTINATION bin)
