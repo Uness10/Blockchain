@@ -1,10 +1,13 @@
-#ifndef BLOCK_HPP
-#define BLOCK_HPP
+#ifndef BLOCK_H
+#define BLOCK_H
 
 #include <string>
+#include <iostream>
+#include <ctime>
+#include <iomanip>
 #include <openssl/sha.h>
-#include "exceptions.hpp"
-#include "console.hpp"
+#include <sstream>
+#include "exceptions.h"
 
 class Block {
 private:
@@ -16,17 +19,15 @@ private:
     long long nonce;
 
     std::string calculateHash() const;
-
+   Block(int idx, const std::string& timestamp, const std::string& data, const std::string& previousHash, const std::string& hash, long long nonce);
+        
 public:
     Block(int idx, const std::string& dataInput, const std::string& prevHash);
-    Block(int idx, const std::string& timestamp, const std::string& data,
-          const std::string& previousHash, const std::string& hash, long long nonce);
 
-    static Block adapt(int idx, const std::string& timestamp, const std::string& data,
+    static Block adapt(int idx, const std::string& timestamp, const std::string& data, 
                        const std::string& previousHash, const std::string& hash, long long nonce);
 
     void mineBlock(int difficulty);
-    bool validateBlock() const;
 
     int getIndex() const;
     std::string getTimestamp() const;
@@ -34,6 +35,7 @@ public:
     std::string getPreviousHash() const;
     std::string getHash() const;
     long long getNonce() const;
+    bool validateBlock() const;
 };
 
-#endif // BLOCK_HPP
+#endif

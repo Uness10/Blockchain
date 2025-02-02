@@ -1,39 +1,47 @@
-#include "blockchain.hpp"
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include <stdexcept>
-#include <json.hpp>
+#include "blockchain.h"
+
 
 using namespace std;
 using json = nlohmann::json;
-
-Console* console = Console::getInstance();  
+using namespace BCE;
 
 Blockchain::Blockchain(int diff, bool init) : difficulty(diff) {
+    logger = new Logger();
     if (init) {
         Block genesisBlock(0, "Genesis Block", "0");
         genesisBlock.mineBlock(difficulty);
         chain.push_back(genesisBlock);
-        console->log("Genesis block created.");
+        logger->log("Genesis block created.");
     }
 }
 
-const vector<Block>& Blockchain::getChain() const {
-    return chain;
+Blockchain::~Blockchain() {
+    delete logger;  
+}
+
+void Blockchain::printChain() const {
+    std::cout << "===== Blockchain Start =====" << std::endl;
+    for (const auto& block : chain) {
+        std::cout << "Block #" << block.getIndex() << std::endl;
+        std::cout << "Timestamp: " << block.getTimestamp() << std::endl;
+        std::cout << "Data: " << block.getData() << std::endl;
+        std::cout << "Previous Hash: " << block.getPreviousHash() << std::endl;
+        std::cout << "Hash: " << block.getHash() << std::endl;
+        std::cout << "Nonce: " << block.getNonce() << std::endl;
+        std::cout << "--------------------------" << std::endl;
+    }
+    std::cout << "===== Blockchain End =====" << std::endl;
 }
 
 void Blockchain::addBlock(const string& data) {
     if (data.empty()) {
         throw InvalidDataException("Block data cannot be empty");
     }
-    try {
-        Block newBlock(chain.size(), data, chain.back().getHash());
-        newBlock.mineBlock(difficulty);
-        chain.push_back(newBlock);
-    } catch (const MiningException& e) {
-        console->log("Mining error: " + string(e.what()));
-    }
+    Block newBlock(chain.size(), data, chain.back().getHash());
+    newBlock.mineBlock(difficulty);
+    chain.push_back(newBlock);
+    logger->log("Block added to Blockchain. Current length : "+ to_string(newBlock.getIndex()));
+    // logger->log("Block mined: " + hash + " - After " + to_string(nonce) + " attempts");
 }
 
 bool Blockchain::isChainValid() const {
@@ -66,7 +74,7 @@ void Blockchain::exportToJSON(const string& fname) {
     if (file.is_open()) {
         file << data.dump(4);  
         file.close();
-        console->log("Blockchain exported to " + fname);
+        logger->log("Blockchain exported to " + fname);
     } else {
         throw FileException("Failed to open file: " + fname);
     }
@@ -111,7 +119,7 @@ void Blockchain::importFromJSON(const string& fname) {
 
         chain.push_back(b);
     }
-    console->log("Blockchain imported from " + fname);
+    logger->log("Blockchain imported from " + fname);
     if (!isChainValid())
         throw InvalidBlockchainException("Imported blockchain is invalid!");
 }
@@ -134,7 +142,7 @@ void Blockchain::exportToCSV(const string& fname) {
     }
 
     file.close();
-    console->log("Blockchain exported to " + fname);
+    logger->log("Blockchain exported to " + fname);
 }
 
 void Blockchain::importFromCSV(const string& fname) {
@@ -185,7 +193,7 @@ void Blockchain::importFromCSV(const string& fname) {
     }
 
     file.close();
-    console->log("Blockchain imported from " + fname);
+    logger->log("Blockchain imported from " + fname);
 
     if (!isChainValid()) {
         throw InvalidBlockchainException("Imported blockchain is invalid!");

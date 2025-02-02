@@ -1,5 +1,5 @@
-#include "blockchain.hpp"
-#include "exceptions.hpp"
+#include "blockchain.h"
+#include "exceptions.h"
 
 using namespace BCE ; 
 using namespace std ; 

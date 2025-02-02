@@ -1,11 +1,8 @@
-#include "block.hpp"
-#include <sstream>
-#include <iomanip>
-#include <ctime>
+#include "block.h"
+
 
 using namespace std;
-
-Console* console = Console::getInstance();  
+using namespace BCE;
 
 Block::Block(int idx, const string& dataInput, const string& prevHash)
     : index(idx), data(dataInput), previousHash(prevHash), nonce(0) {
@@ -51,7 +48,6 @@ void Block::mineBlock(int difficulty) {
         nonce++;
         hash = calculateHash();
     }
-    console->log("Block mined: " + hash + " - After " + to_string(nonce) + " attempts");
 }
 
 bool Block::validateBlock() const {
