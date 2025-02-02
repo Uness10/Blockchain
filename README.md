@@ -24,13 +24,14 @@ project/
 ├── CMakeLists.txt
 ├── src/
 │   ├── main.cpp
-│   ├── Blockchain.cpp
-│   ├── Blockchain.h
-│   ├── Block.cpp
-│   ├── Block.h
-│   └── BlockchainException.h
+│   ├── blockchain.cpp
+│   ├── blockchain.hpp
+│   ├── block.cpp
+│   ├── block.hpp
+│   └── exceptions.hpp
 ├── files/
 │   └── blockchain.csv
+│   └── blockchain.json
 └── build/
 ```
 
