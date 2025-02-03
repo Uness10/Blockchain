@@ -1,21 +1,28 @@
 #include "block.hpp"
 #include <sstream>
 #include <iomanip>
-#include "exceptions.hpp"
+#include <ctime>
 
-using namespace std ; 
-using namespace BCE ;
+using namespace std;
+
+Console* console = Console::getInstance();  
 
 Block::Block(int idx, const string& dataInput, const string& prevHash)
     : index(idx), data(dataInput), previousHash(prevHash), nonce(0) {
     time_t now = time(0);
     timestamp = string(ctime(&now));
-    timestamp.pop_back(); 
+    timestamp.pop_back(); // Remove newline character
     hash = calculateHash();
 }
-Block::Block(int idx, const string& timestamp, const string& data, const string& previousHash, const string& hash, long long nonce)
-        : index(idx), timestamp(timestamp), data(data), previousHash(previousHash), hash(hash), nonce(nonce) {}
 
+Block::Block(int idx, const string& timestamp, const string& data,
+             const string& previousHash, const string& hash, long long nonce)
+    : index(idx), timestamp(timestamp), data(data), previousHash(previousHash), hash(hash), nonce(nonce) {}
+
+Block Block::adapt(int idx, const string& timestamp, const string& data, 
+                   const string& previousHash, const string& hash, long long nonce) {
+    return Block(idx, timestamp, data, previousHash, hash, nonce);
+}
 
 string Block::calculateHash() const {
     stringstream ss;
@@ -32,11 +39,6 @@ string Block::calculateHash() const {
     return hashString.str();
 }
 
-Block Block::adapt(int idx, const string& timestamp, const string& data, 
-                   const string& previousHash, const string& hash, long long nonce) {
-    return Block(idx, timestamp, data, previousHash, hash, nonce);
-}
-
 void Block::mineBlock(int difficulty) {
     string target(difficulty, '0');
     long long attempts = 0;
@@ -49,7 +51,11 @@ void Block::mineBlock(int difficulty) {
         nonce++;
         hash = calculateHash();
     }
-    cout << "Block mined: " << hash << " - After " << nonce << " attempts" << endl;
+    console->log("Block mined: " + hash + " - After " + to_string(nonce) + " attempts");
+}
+
+bool Block::validateBlock() const {
+    return hash == calculateHash();
 }
 
 int Block::getIndex() const { return index; }
@@ -58,16 +64,3 @@ string Block::getData() const { return data; }
 string Block::getPreviousHash() const { return previousHash; }
 string Block::getHash() const { return hash; }
 long long Block::getNonce() const { return nonce; }
-
-bool Block::validateBlock() const {
-    return hash == calculateHash();
-}
-
-void Block::printBlock() const {
-    cout << "Block Index: " << index << endl;
-    cout << "Timestamp: " << timestamp << endl;
-    cout << "Nonce: " << nonce << endl;
-    cout << "Data: " << data << endl;
-    cout << "Previous Hash: " << previousHash << endl;
-    cout << "Hash: " << hash << endl;
-}

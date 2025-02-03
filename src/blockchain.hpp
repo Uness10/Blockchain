@@ -1,11 +1,10 @@
-#ifndef BLOCKCHAIN_H
-#define BLOCKCHAIN_H
+#ifndef BLOCKCHAIN_HPP
+#define BLOCKCHAIN_HPP
 
+#include "block.hpp"
+#include "console.hpp"
 #include <vector>
 #include <string>
-#include "block.hpp"
-#include "exceptions.hpp"
-#include "json.hpp"
 
 class Blockchain {
 private:
@@ -14,16 +13,15 @@ private:
 
 public:
     Blockchain(int diff, bool init = true);
-    
+
+    const std::vector<Block>& getChain() const;
     void addBlock(const std::string& data);
     bool isChainValid() const;
-    void printChain() const;
 
     void exportToJSON(const std::string& fname);
     void importFromJSON(const std::string& fname);
-
     void exportToCSV(const std::string& fname);
     void importFromCSV(const std::string& fname);
 };
 
-#endif
+#endif // BLOCKCHAIN_HPP

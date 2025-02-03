@@ -6,53 +6,47 @@
 #include <json.hpp>
 
 using namespace std;
-using namespace BCE;
-
 using json = nlohmann::json;
+
+Console* console = Console::getInstance();  
 
 Blockchain::Blockchain(int diff, bool init) : difficulty(diff) {
     if (init) {
         Block genesisBlock(0, "Genesis Block", "0");
         genesisBlock.mineBlock(difficulty);
         chain.push_back(genesisBlock);
+        console->log("Genesis block created.");
     }
+}
+
+const vector<Block>& Blockchain::getChain() const {
+    return chain;
 }
 
 void Blockchain::addBlock(const string& data) {
     if (data.empty()) {
-        throw InvalidDataException("Block Data cannot be empty");
+        throw InvalidDataException("Block data cannot be empty");
     }
     try {
         Block newBlock(chain.size(), data, chain.back().getHash());
         newBlock.mineBlock(difficulty);
         chain.push_back(newBlock);
     } catch (const MiningException& e) {
-        cerr << e.what() << endl;
+        console->log("Mining error: " + string(e.what()));
     }
 }
 
 bool Blockchain::isChainValid() const {
-    try {
-        for (size_t i = 1; i < chain.size(); i++) {
-            const Block& currentBlock = chain[i];
-            const Block& previousBlock = chain[i - 1];
+    for (size_t i = 1; i < chain.size(); i++) {
+        const Block& currentBlock = chain[i];
+        const Block& previousBlock = chain[i - 1];
 
-            if (currentBlock.getPreviousHash() != previousBlock.getHash()) {
-                throw InvalidBlockException("Previous hash mismatch at block " + to_string(currentBlock.getIndex()));
-            }
-        }
-    } catch (const InvalidBlockException& e) {
-        cerr << e.what() << endl;
-        return false;
+        if (currentBlock.getPreviousHash() != previousBlock.getHash()) 
+            throw InvalidBlockException("Previous hash mismatch at block " + to_string(currentBlock.getIndex()));
+        
     }
+
     return true;
-}
-
-void Blockchain::printChain() const {
-    for (const Block& block : chain) {
-        block.printBlock();
-        cout << "-------------------------" << endl;
-    }
 }
 
 void Blockchain::exportToJSON(const string& fname) {
@@ -67,12 +61,12 @@ void Blockchain::exportToJSON(const string& fname) {
         block["nonce"] = b.getNonce();
         data.push_back(block);
     }
-    
+
     ofstream file(fname);
     if (file.is_open()) {
-        file << data.dump(4);  // Pretty print with indentation of 4 spaces
+        file << data.dump(4);  
         file.close();
-        cout << "Blockchain exported to " << fname << endl;
+        console->log("Blockchain exported to " + fname);
     } else {
         throw FileException("Failed to open file: " + fname);
     }
@@ -83,7 +77,7 @@ void Blockchain::importFromJSON(const string& fname) {
     if (!file.is_open()) {
         throw FileException("Failed to open file: " + fname);
     }
-    
+
     json data;
     try {
         file >> data;
@@ -96,12 +90,12 @@ void Blockchain::importFromJSON(const string& fname) {
     for (const auto& blockJ : data) {
         if (!blockJ.contains("index"))
             throw InvalidFormatException("In JSON Data - Missing index field at some Block");
-        
+
         if (!blockJ.contains("data") || !blockJ.contains("previousHash") || 
             !blockJ.contains("nonce") || !blockJ.contains("hash") || !blockJ.contains("timestamp")) {
             throw InvalidFormatException("In JSON Data - Missing required fields at Block " + to_string(blockJ["index"]));
         }
-        
+
         Block b = Block::adapt(
             blockJ["index"],
             blockJ["timestamp"],
@@ -117,7 +111,7 @@ void Blockchain::importFromJSON(const string& fname) {
 
         chain.push_back(b);
     }
-    cout << "Blockchain imported from " << fname << endl;
+    console->log("Blockchain imported from " + fname);
     if (!isChainValid())
         throw InvalidBlockchainException("Imported blockchain is invalid!");
 }
@@ -140,7 +134,7 @@ void Blockchain::exportToCSV(const string& fname) {
     }
 
     file.close();
-    cout << "Blockchain exported to " << fname << endl;
+    console->log("Blockchain exported to " + fname);
 }
 
 void Blockchain::importFromCSV(const string& fname) {
@@ -158,7 +152,6 @@ void Blockchain::importFromCSV(const string& fname) {
         stringstream ss(line);
         string indexStr, timestamp, data, previousHash, hash, nonceStr;
 
-        // Read values and check for missing fields
         if (!getline(ss, indexStr, ',') || 
             !getline(ss, timestamp, ',') || 
             !getline(ss, data, ',') || 
@@ -168,11 +161,9 @@ void Blockchain::importFromCSV(const string& fname) {
             throw InvalidFormatException("In CSV data - Missing required fields in line: " + to_string(i));
         }
 
-        // Remove quotes from timestamp and data
         timestamp = timestamp.substr(1, timestamp.size() - 2);
         data = data.substr(1, data.size() - 2);
 
-        // Convert index and nonce to integers, with error handling for invalid conversion
         int index = 0;
         long long nonce = 0;
         try {
@@ -184,9 +175,7 @@ void Blockchain::importFromCSV(const string& fname) {
             throw InvalidFormatException("In CSV data - Number out of range in line: " + to_string(i));
         }
 
-        // Create a block from the CSV data
         Block b = Block::adapt(index, timestamp, data, previousHash, hash, nonce);
-        // Validate the block
         if (!b.validateBlock()) {
             throw InvalidBlockException("In CSV data - Hash mismatch at block " + indexStr);
         }
@@ -196,9 +185,8 @@ void Blockchain::importFromCSV(const string& fname) {
     }
 
     file.close();
-    cout << "Blockchain imported from " << fname << endl;
+    console->log("Blockchain imported from " + fname);
 
-    // Validate the entire chain
     if (!isChainValid()) {
         throw InvalidBlockchainException("Imported blockchain is invalid!");
     }
