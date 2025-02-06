@@ -1,6 +1,5 @@
 #include "block.h"
 
-
 using namespace std;
 using namespace BCE;
 
@@ -8,32 +7,31 @@ Block::Block(int idx, const string& dataInput, const string& prevHash)
     : index(idx), data(dataInput), previousHash(prevHash), nonce(0) {
     time_t now = time(0);
     timestamp = string(ctime(&now));
-    timestamp.pop_back(); // Remove newline character
+    timestamp.pop_back(); 
     hash = calculateHash();
 }
 
 Block::Block(int idx, const string& timestamp, const string& data,
-             const string& previousHash, const string& hash, long long nonce)
-    : index(idx), timestamp(timestamp), data(data), previousHash(previousHash), hash(hash), nonce(nonce) {}
+             const string& previousHash, const string& hash,const vector<Transaction>& txs,   long long nonce)
+    : index(idx), timestamp(timestamp), data(data), 
+      previousHash(previousHash), hash(hash), nonce(nonce), transactions(txs) {}
 
 Block Block::adapt(int idx, const string& timestamp, const string& data, 
-                   const string& previousHash, const string& hash, long long nonce) {
-    return Block(idx, timestamp, data, previousHash, hash, nonce);
+                   const string& previousHash, const string& hash, 
+                   const vector<Transaction>& txs, long long nonce) {
+    return Block(idx, timestamp, data, previousHash, hash, txs, nonce);
 }
 
 string Block::calculateHash() const {
     stringstream ss;
     ss << index << timestamp << data << previousHash << nonce;
-    string toHash = ss.str();
 
-    unsigned char hashResult[SHA256_DIGEST_LENGTH];
-    SHA256(reinterpret_cast<const unsigned char*>(toHash.c_str()), toHash.size(), hashResult);
-    
-    stringstream hashString;
-    for (int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
-        hashString << hex << setw(2) << setfill('0') << static_cast<int>(hashResult[i]);
+    for (const auto& tx : transactions) {
+        ss << tx.getSender() << tx.getRecipient() 
+           << tx.getAmount() << tx.getSignature();
     }
-    return hashString.str();
+
+    return crypto::hash(ss.str());
 }
 
 void Block::mineBlock(int difficulty) {
@@ -51,12 +49,26 @@ void Block::mineBlock(int difficulty) {
 }
 
 bool Block::validateBlock() const {
-    return hash == calculateHash();
+    // Step 1: Check if the stored hash matches the recalculated hash
+    if (hash != calculateHash()) {
+        return false;
+    }
+
+    // Step 2: Verify each transaction using its sender's public key
+    for (const auto& tx : transactions) {
+        if (!tx.verifySignature(tx.getSender())) { 
+            return false; // If any transaction is invalid, block is invalid
+        }
+    }
+
+    return true; // Block is valid if hash and transactions are correct
 }
 
+// Getters
 int Block::getIndex() const { return index; }
 string Block::getTimestamp() const { return timestamp; }
 string Block::getData() const { return data; }
 string Block::getPreviousHash() const { return previousHash; }
 string Block::getHash() const { return hash; }
 long long Block::getNonce() const { return nonce; }
+vector<Transaction> Block::getTransactions() const { return transactions; }

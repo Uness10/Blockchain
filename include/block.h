@@ -3,39 +3,55 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
 #include <ctime>
 #include <iomanip>
-#include <openssl/sha.h>
 #include <sstream>
 #include "exceptions.h"
+#include "crypto.h"
+#include "transaction.h"
+
+using namespace std;
 
 class Block {
 private:
     int index;
-    std::string timestamp;
-    std::string data;
-    std::string previousHash;
-    std::string hash;
+    string timestamp;
+    string data;
+    string previousHash;
+    string hash;
+    vector<Transaction> transactions;
     long long nonce;
 
-    std::string calculateHash() const;
-   Block(int idx, const std::string& timestamp, const std::string& data, const std::string& previousHash, const std::string& hash, long long nonce);
+    string calculateHash() const;
+
+    // Private constructor for adaptation
+    Block(int idx, const string& timestamp, const string& data, 
+          const string& previousHash, const string& hash, 
+          const vector<Transaction>& transactions, long long nonce);
         
 public:
-    Block(int idx, const std::string& dataInput, const std::string& prevHash);
+    // Main constructor
+    Block(int idx, const string& dataInput, const string& prevHash);
 
-    static Block adapt(int idx, const std::string& timestamp, const std::string& data, 
-                       const std::string& previousHash, const std::string& hash, long long nonce);
+    // Static method to adapt existing block data
+    static Block adapt(int idx, const string& timestamp, const string& data, 
+                       const string& previousHash, const string& hash, 
+                       const vector<Transaction>& transactions, long long nonce);
 
+    // Mining function
     void mineBlock(int difficulty);
 
+    // Getters
     int getIndex() const;
-    std::string getTimestamp() const;
-    std::string getData() const;
-    std::string getPreviousHash() const;
-    std::string getHash() const;
+    string getTimestamp() const;
+    string getData() const;
+    string getPreviousHash() const;
+    string getHash() const;
     long long getNonce() const;
+    vector<Transaction> Block::getTransactions() const;
+    // Validate block
     bool validateBlock() const;
 };
 
-#endif
+#endif // BLOCK_H

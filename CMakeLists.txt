@@ -25,6 +25,8 @@ add_executable(blockchain
     src/main.cpp  # Updated to point to main.cpp
     src/blockchain.cpp  # Other source files, if any
     src/block.cpp
+    src/crypto.cpp
+    src/transaction.cpp
 )
 
 # Link libraries

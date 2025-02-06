@@ -103,6 +103,7 @@ void Blockchain::importFromJSON(const string& fname) {
             !blockJ.contains("nonce") || !blockJ.contains("hash") || !blockJ.contains("timestamp")) {
             throw InvalidFormatException("In JSON Data - Missing required fields at Block " + to_string(blockJ["index"]));
         }
+        vector<Transaction> txs = {};
 
         Block b = Block::adapt(
             blockJ["index"],
@@ -110,6 +111,7 @@ void Blockchain::importFromJSON(const string& fname) {
             blockJ["data"],
             blockJ["previousHash"],
             blockJ["hash"],
+            txs,
             blockJ["nonce"]
         );
 
@@ -182,8 +184,8 @@ void Blockchain::importFromCSV(const string& fname) {
         } catch (const out_of_range& e) {
             throw InvalidFormatException("In CSV data - Number out of range in line: " + to_string(i));
         }
-
-        Block b = Block::adapt(index, timestamp, data, previousHash, hash, nonce);
+        vector<Transaction> txs = {};
+        Block b = Block::adapt(index, timestamp, data, previousHash, hash, txs, nonce);
         if (!b.validateBlock()) {
             throw InvalidBlockException("In CSV data - Hash mismatch at block " + indexStr);
         }

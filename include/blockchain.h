@@ -12,6 +12,7 @@
 #include "block.h"
 #include "exceptions.h"
 #include "logger.h"
+#include "transaction.h"
 
 class Blockchain {
 private:
