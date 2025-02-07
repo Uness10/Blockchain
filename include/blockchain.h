@@ -12,7 +12,6 @@
 #include "block.h"
 #include "exceptions.h"
 #include "logger.h"
-#include "transaction.h"
 
 class Blockchain {
 private:
@@ -27,6 +26,7 @@ public:
     ~Blockchain();
 
     void addBlock(const std::string& data);
+    void addTransactionsToBlock(int idx,Transaction& tx);
     bool isChainValid() const;
     void printChain() const;
 
@@ -35,6 +35,9 @@ public:
 
     void exportToCSV(const std::string& fname);
     void importFromCSV(const std::string& fname);
+
+    Block getBlock(int idx)  const  ; 
+    vector<Block> getChain() const ;
 };
 
 #endif

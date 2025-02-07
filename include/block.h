@@ -41,7 +41,7 @@ public:
 
     // Mining function
     void mineBlock(int difficulty);
-
+    void addTransaction(const Transaction& tx);
     // Getters
     int getIndex() const;
     string getTimestamp() const;
@@ -52,6 +52,8 @@ public:
     vector<Transaction> Block::getTransactions() const;
     // Validate block
     bool validateBlock() const;
+
+    void setPrevHash(string& hsh) ; 
 };
 
 #endif // BLOCK_H

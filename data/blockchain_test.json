@@ -1,0 +1,20 @@
+[
+    {
+        "data": "Genesis Block",
+        "hash": "0074f3f01b9d55fdfcd039e3826125c4a4a7d06147cbb96aac6a06579b27c36a",
+        "index": 0,
+        "nonce": 267,
+        "previousHash": "0",
+        "timestamp": "Thu Feb  6 23:04:09 2025",
+        "transactions": []
+    },
+    {
+        "data": "test1",
+        "hash": "0019775b32bc446c190df2e827ca2db021df10907b4f2b853a9d4ab6b7198570",
+        "index": 1,
+        "nonce": 182,
+        "previousHash": "0074f3f01b9d55fdfcd039e3826125c4a4a7d06147cbb96aac6a06579b27c36a",
+        "timestamp": "Thu Feb  6 23:04:09 2025",
+        "transactions": []
+    }
+]

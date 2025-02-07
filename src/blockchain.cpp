@@ -43,19 +43,41 @@ void Blockchain::addBlock(const string& data) {
     logger->log("Block added to Blockchain. Current length : "+ to_string(newBlock.getIndex()));
     // logger->log("Block mined: " + hash + " - After " + to_string(nonce) + " attempts");
 }
+void Blockchain::addTransactionsToBlock(int idx, Transaction& tx) {
+    if (idx < 0 || idx >= chain.size()) {
+        throw InvalidDataException("Block index out of range.");
+    }
+
+    Block* b = &chain[idx];
+    b->addTransaction(tx);
+    b->mineBlock(difficulty);
+
+    for (size_t i = idx + 1; i < chain.size(); i++) {
+        Block* ele = &chain[i] ; 
+        ele->setPrevHash(this->chain[i - 1].getHash());
+        ele->mineBlock(difficulty);
+    }
+
+    logger->log("Transaction added, blockchain updated from block " + to_string(idx));
+}
+
 
 bool Blockchain::isChainValid() const {
     for (size_t i = 1; i < chain.size(); i++) {
         const Block& currentBlock = chain[i];
         const Block& previousBlock = chain[i - 1];
 
-        if (currentBlock.getPreviousHash() != previousBlock.getHash()) 
+        if (currentBlock.getPreviousHash() != previousBlock.getHash()) {
             throw InvalidBlockException("Previous hash mismatch at block " + to_string(currentBlock.getIndex()));
-        
-    }
+        }
 
+        if (!currentBlock.validateBlock()) {
+            throw InvalidBlockException("Invalid block detected at index " + to_string(currentBlock.getIndex()));
+        }
+    }
     return true;
 }
+
 
 void Blockchain::exportToJSON(const string& fname) {
     json data;
@@ -66,19 +88,33 @@ void Blockchain::exportToJSON(const string& fname) {
         block["data"] = b.getData();
         block["previousHash"] = b.getPreviousHash();
         block["hash"] = b.getHash();
+
+        json transactions = json::array();
+        for (const Transaction& t : b.getTransactions()) {  
+            transactions.push_back({
+                {"sender", t.getSenderPublicKey()},
+                {"receiver", t.getRecipientPublicKey()},
+                {"amount", t.getAmount()},
+                {"timestamp", t.getTimestamp()},
+                {"signature", t.getSignature()}
+            });
+        }
+        block["transactions"] = transactions;  
         block["nonce"] = b.getNonce();
+
         data.push_back(block);
     }
 
     ofstream file(fname);
     if (file.is_open()) {
-        file << data.dump(4);  
+        file << data.dump(4);
         file.close();
-        logger->log("Blockchain exported to " + fname);
+        if (logger) logger->log("Blockchain exported to " + fname);
     } else {
         throw FileException("Failed to open file: " + fname);
     }
 }
+
 
 void Blockchain::importFromJSON(const string& fname) {
     ifstream file(fname);
@@ -100,11 +136,28 @@ void Blockchain::importFromJSON(const string& fname) {
             throw InvalidFormatException("In JSON Data - Missing index field at some Block");
 
         if (!blockJ.contains("data") || !blockJ.contains("previousHash") || 
-            !blockJ.contains("nonce") || !blockJ.contains("hash") || !blockJ.contains("timestamp")) {
+            !blockJ.contains("nonce") || !blockJ.contains("hash") || 
+            !blockJ.contains("timestamp") || !blockJ.contains("transactions")) {
             throw InvalidFormatException("In JSON Data - Missing required fields at Block " + to_string(blockJ["index"]));
         }
-        vector<Transaction> txs = {};
 
+        vector<Transaction> txs;
+        // for (const auto& txJ : blockJ["transactions"]) {
+        //     if (!txJ.contains("sender") || !txJ.contains("receiver") || 
+        //         !txJ.contains("amount") ||!txJ.contains("timestamp") || !txJ.contains("signature")) {
+        //         throw InvalidFormatException("Transaction missing required fields in Block " + to_string(blockJ["index"].get<int>()));
+        //     }
+        //     Transaction tx = Transaction::adapt(
+        //         txJ["sender"],
+        //         txJ["receiver"],
+        //         txJ["amount"],
+        //         txJ["timestamp"],
+        //         txJ["signature"]
+        //     );
+        //     txs.push_back(tx);
+        // }
+
+        // Create block
         Block b = Block::adapt(
             blockJ["index"],
             blockJ["timestamp"],
@@ -115,16 +168,25 @@ void Blockchain::importFromJSON(const string& fname) {
             blockJ["nonce"]
         );
 
+
+
         if (!b.validateBlock()) {
-            throw InvalidBlockException("In JSON data - Hash mismatch at block " + to_string(blockJ["index"]));
+            throw InvalidBlockException("In JSON data - Corrupted block " + to_string(blockJ["index"]));
         }
 
         chain.push_back(b);
     }
-    logger->log("Blockchain imported from " + fname);
-    if (!isChainValid())
+
+    if (logger) logger->log("Blockchain imported from " + fname);
+
+    if (!isChainValid()) {
         throw InvalidBlockchainException("Imported blockchain is invalid!");
+    }
 }
+
+Block Blockchain::getBlock(int idx)  const  { return chain[idx]; }
+vector<Block> Blockchain::getChain() const { return chain;} 
+
 
 void Blockchain::exportToCSV(const string& fname) {
     ofstream file(fname);
@@ -201,3 +263,6 @@ void Blockchain::importFromCSV(const string& fname) {
         throw InvalidBlockchainException("Imported blockchain is invalid!");
     }
 }
+
+
+

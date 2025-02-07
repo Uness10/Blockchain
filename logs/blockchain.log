@@ -2,3 +2,40 @@
 [2025-02-04 15:42:46] Blockchain imported from data/blockchain.csv
 [2025-02-04 15:43:55] Blockchain imported from data/blockchain.csv
 [2025-02-05 18:48:00] Blockchain imported from data/blockchain.csv
+[2025-02-06 23:00:46] Genesis block created.
+[2025-02-06 23:01:25] Genesis block created.
+[2025-02-06 23:02:40] Genesis block created.
+[2025-02-06 23:03:21] Genesis block created.
+[2025-02-06 23:04:09] Genesis block created.
+[2025-02-06 23:04:09] Block added to Blockchain. Current length : 1
+[2025-02-06 23:04:09] Blockchain exported to data/blockchain_test.json
+[2025-02-06 23:04:09] Blockchain imported from data/blockchain_test.json
+[2025-02-07 23:50:04] Genesis block created.
+[2025-02-07 23:51:27] Genesis block created.
+[2025-02-07 23:51:49] Genesis block created.
+[2025-02-07 23:52:25] Genesis block created.
+[2025-02-07 23:53:18] Genesis block created.
+[2025-02-07 23:54:23] Genesis block created.
+[2025-02-07 23:58:20] Genesis block created.
+[2025-02-08 00:00:50] Genesis block created.
+[2025-02-08 00:03:27] Genesis block created.
+[2025-02-08 00:04:04] Genesis block created.
+[2025-02-08 00:04:39] Genesis block created.
+[2025-02-08 00:05:42] Genesis block created.
+[2025-02-08 00:08:27] Genesis block created.
+[2025-02-08 00:13:45] Genesis block created.
+[2025-02-08 00:14:30] Genesis block created.
+[2025-02-08 00:17:25] Genesis block created.
+[2025-02-08 00:20:57] Genesis block created.
+[2025-02-08 00:34:02] Genesis block created.
+[2025-02-08 00:34:02] Block added to Blockchain. Current length : 1
+[2025-02-08 00:34:03] Transaction added, blockchain updated from block 1
+[2025-02-08 00:35:51] Genesis block created.
+[2025-02-08 00:35:52] Block added to Blockchain. Current length : 1
+[2025-02-08 00:35:52] Transaction added, blockchain updated from block 1
+[2025-02-08 00:50:57] Genesis block created.
+[2025-02-08 00:50:57] Block added to Blockchain. Current length : 1
+[2025-02-08 00:50:57] Transaction added, blockchain updated from block 1
+[2025-02-08 00:51:16] Genesis block created.
+[2025-02-08 00:51:16] Block added to Blockchain. Current length : 1
+[2025-02-08 00:51:16] Transaction added, blockchain updated from block 1

@@ -3,7 +3,33 @@
 using namespace std;
 
 namespace crypto {
+    void generateKeyPair(const string& privateKeyFile, const string& publicKeyFile) {
+        RSA* rsa = RSA_generate_key(2048, RSA_F4, NULL, NULL);
+        if (!rsa) {
+            throw runtime_error("Failed to generate RSA key pair");
+        }
 
+        // Save Private Key
+        BIO* privateBio = BIO_new_file(privateKeyFile.c_str(), "w");
+        if (!privateBio) {
+            RSA_free(rsa);
+            throw runtime_error("Failed to create private key file");
+        }
+        PEM_write_bio_RSAPrivateKey(privateBio, rsa, NULL, NULL, 0, NULL, NULL);
+        BIO_free(privateBio);
+
+        // Save Public Key
+        BIO* publicBio = BIO_new_file(publicKeyFile.c_str(), "w");
+        if (!publicBio) {
+            RSA_free(rsa);
+            throw runtime_error("Failed to create public key file");
+        }
+        PEM_write_bio_RSA_PUBKEY(publicBio, rsa);
+        BIO_free(publicBio);
+
+        RSA_free(rsa);
+    }
+    
     // 🔹 Hash Function (SHA-256)
      string hash(const string& data) {
         unsigned char hashResult[SHA256_DIGEST_LENGTH];
@@ -20,10 +46,16 @@ namespace crypto {
      string sign(const string& data, const string& privateKeyStr) {
         BIO *bio = BIO_new_mem_buf(privateKeyStr.c_str(), -1);
         if (!bio) throw runtime_error("Failed to create BIO for private key");
-
+        cout << 1 <<endl;
         RSA *privateKey = PEM_read_bio_RSAPrivateKey(bio, NULL, NULL, NULL);
+        if (!privateKey) {
+            ERR_print_errors_fp(stderr);  // Print OpenSSL error
+            BIO_free(bio);
+            throw runtime_error("Failed to read private key for signing");
+        }
         BIO_free(bio);
         if (!privateKey) throw runtime_error("Failed to read private key for signing");
+        cout << 2<<endl;
 
         // Compute SHA-256 hash before signing
         unsigned char hashResult[SHA256_DIGEST_LENGTH];
@@ -32,6 +64,7 @@ namespace crypto {
         // Allocate correct buffer size for signature
         vector<unsigned char> signatureBuffer(RSA_size(privateKey));
         unsigned int signatureLength;
+        cout << 3<<endl;
 
         int result = RSA_sign(NID_sha256,
             hashResult, SHA256_DIGEST_LENGTH,  // Use computed hash

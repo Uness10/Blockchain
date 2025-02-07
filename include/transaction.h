@@ -8,37 +8,49 @@
 #include <iomanip>
 
 #include "crypto.h"
+#include "user.h"
 
 using namespace std;
+
 class Transaction {
-    string sender;     // Sender's public key
-    string recipient;  // Recipient's public key
-    double amount;          // Transaction amount
-    long long timestamp;    // Transaction timestamp
-    string hash ;
+private:
+    const User sender;      // Sender's user reference
+    const User recipient;   // Recipient's user reference
+    double amount;           // Transaction amount
+    string timestamp;        // Transaction timestamp
+    string hash;
     string signature; 
+
+    // Private constructor for internal use
+    Transaction(const User& sender, const User& recipient, 
+                double amount, const string& timestamp, const string& signature);
+
 public:
     // Constructor for creating a new transaction
-    Transaction(const string& sender, const string& recipient, 
-                double amount, long long timestamp);
+    Transaction(const User& sender, const User& recipient, 
+                double amount, const string& timestamp);
+
+    // Adapt an existing transaction from JSON data
+    static Transaction adapt(const User& sender, const User& recipient, 
+                             double amount, const string& timestamp, 
+                             const string& signature);
 
     // Verify transaction signature
-    bool verifySignature(const string& publicKeyStr) const;
+    bool verifySignature() const;
 
-    // Sign transaction with private key
-    void signTransaction(const string& privateKeyStr);
+    // Sign transaction with sender's private key
+    void signTransaction();
 
     // Getters
-    string getSender() const;
-    string getRecipient() const;
+    string getSenderPublicKey() const;
+    string getRecipientPublicKey() const;
     double getAmount() const;
-    long long getTimestamp() const;
+    string getTimestamp() const;
     string getSignature() const;
-    string getHash() const ;
+    string getHash() const;
+
     // Generate a hash of the transaction data
     string calculateTransactionHash() const;
-
-
 };
 
 #endif
