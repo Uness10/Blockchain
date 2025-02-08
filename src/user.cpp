@@ -14,7 +14,7 @@ string User::getPrivateKey() const { return privateKey; }
 string User::getPublicKey() const { return publicKey; }
 
 void User::generateKeys() {
-
+    fs::create_directories("keys");
     // Define filenames
     string pkfile = "keys/" + name + "_public.pem"; 
     string skfile = "keys/" + name + "_private.pem"; 

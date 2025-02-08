@@ -46,7 +46,6 @@ namespace crypto {
      string sign(const string& data, const string& privateKeyStr) {
         BIO *bio = BIO_new_mem_buf(privateKeyStr.c_str(), -1);
         if (!bio) throw runtime_error("Failed to create BIO for private key");
-        cout << 1 <<endl;
         RSA *privateKey = PEM_read_bio_RSAPrivateKey(bio, NULL, NULL, NULL);
         if (!privateKey) {
             ERR_print_errors_fp(stderr);  // Print OpenSSL error
@@ -55,7 +54,6 @@ namespace crypto {
         }
         BIO_free(bio);
         if (!privateKey) throw runtime_error("Failed to read private key for signing");
-        cout << 2<<endl;
 
         // Compute SHA-256 hash before signing
         unsigned char hashResult[SHA256_DIGEST_LENGTH];
@@ -64,7 +62,6 @@ namespace crypto {
         // Allocate correct buffer size for signature
         vector<unsigned char> signatureBuffer(RSA_size(privateKey));
         unsigned int signatureLength;
-        cout << 3<<endl;
 
         int result = RSA_sign(NID_sha256,
             hashResult, SHA256_DIGEST_LENGTH,  // Use computed hash

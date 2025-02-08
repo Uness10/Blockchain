@@ -14,9 +14,7 @@ Transaction::Transaction(const User& sender, const User& recipient,
                          double amount, const string& timestamp)
     : sender(sender), recipient(recipient), amount(amount), 
       timestamp(timestamp) {
-        cout << 12<<endl;
     hash = calculateTransactionHash(); // Calculate hash for new transactions
-    cout << 21<<endl;
 }
 
 Transaction Transaction::adapt(const User& sender, const User& recipient, 

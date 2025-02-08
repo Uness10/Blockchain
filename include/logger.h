@@ -4,13 +4,18 @@
 #include <chrono>
 #include <iomanip>
 #include <sstream>
+#include <filesystem>
 
 using namespace std;
+namespace fs = std::filesystem;
 
 struct Logger {
     string fname;
 
-    Logger() : fname("logs/blockchain.log") {}
+    Logger() {
+            fs::create_directories("logs");
+            fname = "logs/app.log" ; 
+    }
 
     void log(const string& msg) const {
         ofstream logFile(fname, ios::app); 
