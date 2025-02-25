@@ -5,3 +5,12 @@
 [2025-02-08 01:13:59] Block added to Blockchain. Current length : 2
 [2025-02-08 01:13:59] Transaction added, blockchain updated from block 2
 [2025-02-08 01:14:00] Transaction added, blockchain updated from block 2
+[2025-02-25 21:10:19] Genesis block created.
+[2025-02-25 21:10:26] Block added to Blockchain. Current length : 1
+[2025-02-25 21:10:26] Transaction added, blockchain updated from block 1
+[2025-02-25 21:10:26] Transaction added, blockchain updated from block 1
+[2025-02-25 21:10:27] Block added to Blockchain. Current length : 2
+[2025-02-25 21:10:27] Transaction added, blockchain updated from block 2
+[2025-02-25 21:10:33] Transaction added, blockchain updated from block 2
+[2025-02-25 21:10:33] Blockchain exported to data/test.json
+[2025-02-25 22:37:48] Blockchain successfully imported from data/test.json

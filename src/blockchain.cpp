@@ -93,7 +93,7 @@ void Blockchain::exportToJSON(const string& fname) {
         for (const Transaction& t : b.getTransactions()) {  
             transactions.push_back({
                 {"sender", t.getSenderPublicKey()},
-                {"receiver", t.getRecipientPublicKey()},
+                {"recipient", t.getRecipientPublicKey()},
                 {"amount", t.getAmount()},
                 {"timestamp", t.getTimestamp()},
                 {"signature", t.getSignature()}
@@ -118,46 +118,51 @@ void Blockchain::exportToJSON(const string& fname) {
 
 void Blockchain::importFromJSON(const string& fname) {
     ifstream file(fname);
-    if (!file.is_open()) {
+    if (!file) {
         throw FileException("Failed to open file: " + fname);
     }
 
     json data;
     try {
         file >> data;
-        file.close();
     } catch (const nlohmann::json::parse_error& e) {
-        throw FileException("JSON Parsing Error - " + string(e.what()));
+        throw FileException("JSON Parsing Error: " + string(e.what()));
     }
 
-    chain.clear();
-    for (const auto& blockJ : data) {
-        if (!blockJ.contains("index"))
-            throw InvalidFormatException("In JSON Data - Missing index field at some Block");
+    vector<Block> tempChain; 
 
-        if (!blockJ.contains("data") || !blockJ.contains("previousHash") || 
-            !blockJ.contains("nonce") || !blockJ.contains("hash") || 
-            !blockJ.contains("timestamp") || !blockJ.contains("transactions")) {
-            throw InvalidFormatException("In JSON Data - Missing required fields at Block " + to_string(blockJ["index"]));
+    for (const auto& blockJ : data) {
+        static const vector<string> blockFields = 
+            {"index", "data", "previousHash", "nonce", "hash", "timestamp", "transactions"};
+        
+        for (const auto& field : blockFields) {
+            if (!blockJ.contains(field)) {
+                throw InvalidFormatException("Missing '" + field + "' field in Block " +
+                                             (blockJ.contains("index") ? to_string(blockJ["index"].get<int>()) : "Unknown"));
+            }
         }
 
         vector<Transaction> txs;
-        // for (const auto& txJ : blockJ["transactions"]) {
-        //     if (!txJ.contains("sender") || !txJ.contains("receiver") || 
-        //         !txJ.contains("amount") ||!txJ.contains("timestamp") || !txJ.contains("signature")) {
-        //         throw InvalidFormatException("Transaction missing required fields in Block " + to_string(blockJ["index"].get<int>()));
-        //     }
-        //     Transaction tx = Transaction::adapt(
-        //         txJ["sender"],
-        //         txJ["receiver"],
-        //         txJ["amount"],
-        //         txJ["timestamp"],
-        //         txJ["signature"]
-        //     );
-        //     txs.push_back(tx);
-        // }
+        for (const auto& txJ : blockJ["transactions"]) {
+            static const vector<string> txFields = 
+                {"sender", "recipient", "amount", "timestamp", "signature"};
 
-        // Create block
+            for (const auto& field : txFields) {
+                if (!txJ.contains(field)) {
+                    throw InvalidFormatException("Transaction missing '" + field +
+                                                 "' in Block " + to_string(blockJ["index"].get<int>()));
+                }
+            }
+
+            txs.push_back(Transaction::adapt(
+                txJ["sender"],
+                txJ["recipient"],
+                txJ["amount"],
+                txJ["timestamp"],
+                txJ["signature"]
+            ));
+        }
+
         Block b = Block::adapt(
             blockJ["index"],
             blockJ["timestamp"],
@@ -168,20 +173,20 @@ void Blockchain::importFromJSON(const string& fname) {
             blockJ["nonce"]
         );
 
-
-
         if (!b.validateBlock()) {
-            throw InvalidBlockException("In JSON data - Corrupted block " + to_string(blockJ["index"]));
+            throw InvalidBlockException("Corrupted block detected: " + to_string(blockJ["index"]));
         }
 
-        chain.push_back(b);
+        tempChain.push_back(b);
     }
 
-    if (logger) logger->log("Blockchain imported from " + fname);
 
+
+    chain = move(tempChain);
     if (!isChainValid()) {
         throw InvalidBlockchainException("Imported blockchain is invalid!");
     }
+    if (logger) logger->log("Blockchain successfully imported from " + fname);
 }
 
 Block Blockchain::getBlock(int idx)  const  { return chain[idx]; }
@@ -263,6 +268,5 @@ void Blockchain::importFromCSV(const string& fname) {
         throw InvalidBlockchainException("Imported blockchain is invalid!");
     }
 }
-
 
 

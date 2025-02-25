@@ -1,0 +1,59 @@
+[
+    {
+        "data": "Genesis Block",
+        "hash": "000a9a671a16016faebca8faeb6031586fdfb6dfe281bcd0d5663c9a39534398",
+        "index": 0,
+        "nonce": 14765,
+        "previousHash": "0",
+        "timestamp": "Tue Feb 25 21:10:11 2025",
+        "transactions": []
+    },
+    {
+        "data": "Block 1",
+        "hash": "000b7d9b298a77d417a4a001f182d8b478fc1272b0ad65da7ca20c8f0d80fd6c",
+        "index": 1,
+        "nonce": 15405,
+        "previousHash": "000a9a671a16016faebca8faeb6031586fdfb6dfe281bcd0d5663c9a39534398",
+        "timestamp": "Tue Feb 25 21:10:19 2025",
+        "transactions": [
+            {
+                "amount": 50.0,
+                "recipient": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4AG+uv3DjuSA03AL5Ubz\nrjEHDZckyoevJ5S0gvrT8BZMXi94AjbINhyVm+NKF+YNfLnmUo4eutHDiOOiekl9\nRy0r7bJiJ/f/EH7zJPokbNn7krWLQYGy+wwhUUuMUdFDP1oCfYSBb0B78FtXWtBw\nXv4pDg4aY5e3+f7kqmJOhr8KOoRHlxueuxSbRIaF0ol3Oxxn6XHpXbQrr/nJvRXy\nKpbw5vkEARe/obFjl3oPY53FjkL9no4zXXeUbZgy1rI+khTn50DVU/x5/2BjXjub\n9S/K75rTnDZ0MJziLjyfdmafPY3TQrpch7S8LSbklGDMB15VBz3nuvQhKGoik4Q0\nfwIDAQAB\n-----END PUBLIC KEY-----\n",
+                "sender": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArUNHBujjJjSVjQx8ymiY\nIg5uZbD3EKk1nPYgiKmg9KWoDDMRIqzM8/qdkcbXooU3i58s0m6bZU9GjCasbXLx\nZ1rrVas7oYzPRKQS+YQSJjQmssXY8vnmofrZef/7sOOa3rSCAuIUEC6+EqQ8tT9/\nWh6s7dws+SW3JUC+XFJcEqTjOMS6XlmVvBTFgCzNBosyvmsHECJbmZl+tTLDkuXn\nximAcan0so5DQMY6iEzXzL2OtwrgGs9ykBOmCyD05jVpoK4hwCQAg69tFjevgFzP\nMR5pnKIzpe3usQYBBJEW7sNg8g5NBzbPpA6LFFKMwyROzE1czrNIwoh6LSsh9tD1\newIDAQAB\n-----END PUBLIC KEY-----\n",
+                "signature": "6a002f38cce69bbf1acfcd27e81c0d6dd4ae520007861a61484a26eb51b2dcae0904014ffaa423ba3404e17360fe8f2a2bd119ab20ef568cc200d39041ae500f98fa8962ce71cce2e08dcc3b91296ed97202ed2586c8e1a09d0b4f81563b45bc29a21df0efe59ff9b96c465c20bbfa97809da2bf6205db995cf081c80edf8aa9d1446fc6648c10202604c85dafd36ae2b94302f76c4c5609d1973cd9a56948bdf1762e283a32102c7bb6bb8cfea81bb89d7e157670432735b9a159b3a551a85ce78989b81895f80d9084335d69ed000006e8be7ac5b2f4bf25bcfad8b4e8e35d975c9e61ec0b3ea41cd16fe1d91014eab254931bcb136f9730a8fdb055ca2e6b",
+                "timestamp": "2025-02-06 12:00:00"
+            },
+            {
+                "amount": 30.0,
+                "recipient": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAy0ZbOtLU9cZdf34EBW4x\ny0ajWZ3+04J8P1kCbwzA1N08vyddXupdNadwrD26EIuIP7+5Cno38Hkjkx6McuTm\nwvka6HAHojJ0Lls8MsTs5FkwBYDPULjglumDrAbSaz9bM1PXwh0/dZy3X6HZM31E\nwdY51YqRFGc9JwNRz8IqKccvvoJiFjUr4nLsRhL72zfUrwqIMGg78wRMjCu57EcS\nymfett5Zqw4e9aL/brWz58gkaJNUNBNBh7ipddgGl+by9PjwLdwsarbn5MZM4ylI\nbXl09CD/eMoJ1ehbTM0pRpM22I8BeRP8eZE26S1BNR7xOu3D3lWEU9LR9PcX7NzG\n0wIDAQAB\n-----END PUBLIC KEY-----\n",
+                "sender": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4AG+uv3DjuSA03AL5Ubz\nrjEHDZckyoevJ5S0gvrT8BZMXi94AjbINhyVm+NKF+YNfLnmUo4eutHDiOOiekl9\nRy0r7bJiJ/f/EH7zJPokbNn7krWLQYGy+wwhUUuMUdFDP1oCfYSBb0B78FtXWtBw\nXv4pDg4aY5e3+f7kqmJOhr8KOoRHlxueuxSbRIaF0ol3Oxxn6XHpXbQrr/nJvRXy\nKpbw5vkEARe/obFjl3oPY53FjkL9no4zXXeUbZgy1rI+khTn50DVU/x5/2BjXjub\n9S/K75rTnDZ0MJziLjyfdmafPY3TQrpch7S8LSbklGDMB15VBz3nuvQhKGoik4Q0\nfwIDAQAB\n-----END PUBLIC KEY-----\n",
+                "signature": "da347ff23b5f738a92fadc6155105f69c26baeee81063d14dd12ad41d5732aba804e667e7090d470ad2daed17ffee624bef1d2c0e5095a929e7557cf7513fe8f4910f36e4bdd37d9aeb40cfecfcf0e42db81665fcf6f931364f48aa5b501f2be9f377db427af95c69feb4e9f6d8932abeac3f01e2a032263e93e898beed429ab1e569db9663b970740b848e9cca405ea8898b09b117418008efd2ffc580dd4072b3bc95607d228022aea9f8f166d95dd43339ca63274add8b7e5061ba17c3fdb3f50037bfab30c57d6fbd5c79102a954276590bfa006c065572bb717952cdbc7bf36cecfb8fdb875a4f9329274070bcef642b21162c20cf8fd24be152566908f",
+                "timestamp": "2025-02-06 12:05:00"
+            }
+        ]
+    },
+    {
+        "data": "Block 2",
+        "hash": "0002df6d3fac302497f3fe707a49faea3ceae654073494e54489316fe0040520",
+        "index": 2,
+        "nonce": 14229,
+        "previousHash": "000b7d9b298a77d417a4a001f182d8b478fc1272b0ad65da7ca20c8f0d80fd6c",
+        "timestamp": "Tue Feb 25 21:10:26 2025",
+        "transactions": [
+            {
+                "amount": 20.0,
+                "recipient": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnJ7eFWoQX4WWXhkFYaG6\n86wTpRiz71YRF9kvQ9Vz3GEDcmb1VgFNk5qR8p2H0U19QWJryrZuIHK/jnxpOG1/\nv7JJjqHHTbILGiCzXetvZUWocn7Tv6aSCdx9R5V/ngZ4uiIyinGZq4uqdn8XuY48\nLB7DNRZyXqvfN+VObkMQt5uRN2HdB6lu5yO2/0fo5NV3IpGITTprn+NgM+KnWwSC\nK4q46wJlJgAUeiHjj16UWu5qCuiHjzJsT/XkkaH45yeSM6rhNCZPUVtJ2G4ehm0k\nHkNY75qfm5YybdDJ1p1LUYCacaY7GG0xqn6RyTQLJJ1/Q4cO8Rg+mf7kLDJ30BDl\nOwIDAQAB\n-----END PUBLIC KEY-----\n",
+                "sender": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAy0ZbOtLU9cZdf34EBW4x\ny0ajWZ3+04J8P1kCbwzA1N08vyddXupdNadwrD26EIuIP7+5Cno38Hkjkx6McuTm\nwvka6HAHojJ0Lls8MsTs5FkwBYDPULjglumDrAbSaz9bM1PXwh0/dZy3X6HZM31E\nwdY51YqRFGc9JwNRz8IqKccvvoJiFjUr4nLsRhL72zfUrwqIMGg78wRMjCu57EcS\nymfett5Zqw4e9aL/brWz58gkaJNUNBNBh7ipddgGl+by9PjwLdwsarbn5MZM4ylI\nbXl09CD/eMoJ1ehbTM0pRpM22I8BeRP8eZE26S1BNR7xOu3D3lWEU9LR9PcX7NzG\n0wIDAQAB\n-----END PUBLIC KEY-----\n",
+                "signature": "c5ef460d3d46587dde68ca4287e1b937c669b6d1ffd984ddc0010fa66f6552bb99eb4c5145820e5070ed675a9eb87963e5513612447dd33600c58b5f9f65b6a7d6348adb5730946aa08837fbab3f5cf07de342c22858d7c79854a1b26dbe26ed9d6db673fa17ff322a4744c32d50f08378897bf428df69e659d66d4d1f4bad305e4c1565fc226fdd4b4f39b1a2aaa5ea54931bba564850159f916d01e33eaf3245ceec5d1aecbfabebf25ff49c177b80b46cc74f0a5ae024e12a4aa685bea04365d08e5eed4768ca3344fb2312917a2ac5aa25911820471158979183464f9eee64b0923b399bf137104090a49b9df5d42b091379890e5c88f08f6574d8ce9506",
+                "timestamp": "2025-02-06 12:10:00"
+            },
+            {
+                "amount": 10.0,
+                "recipient": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArUNHBujjJjSVjQx8ymiY\nIg5uZbD3EKk1nPYgiKmg9KWoDDMRIqzM8/qdkcbXooU3i58s0m6bZU9GjCasbXLx\nZ1rrVas7oYzPRKQS+YQSJjQmssXY8vnmofrZef/7sOOa3rSCAuIUEC6+EqQ8tT9/\nWh6s7dws+SW3JUC+XFJcEqTjOMS6XlmVvBTFgCzNBosyvmsHECJbmZl+tTLDkuXn\nximAcan0so5DQMY6iEzXzL2OtwrgGs9ykBOmCyD05jVpoK4hwCQAg69tFjevgFzP\nMR5pnKIzpe3usQYBBJEW7sNg8g5NBzbPpA6LFFKMwyROzE1czrNIwoh6LSsh9tD1\newIDAQAB\n-----END PUBLIC KEY-----\n",
+                "sender": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnJ7eFWoQX4WWXhkFYaG6\n86wTpRiz71YRF9kvQ9Vz3GEDcmb1VgFNk5qR8p2H0U19QWJryrZuIHK/jnxpOG1/\nv7JJjqHHTbILGiCzXetvZUWocn7Tv6aSCdx9R5V/ngZ4uiIyinGZq4uqdn8XuY48\nLB7DNRZyXqvfN+VObkMQt5uRN2HdB6lu5yO2/0fo5NV3IpGITTprn+NgM+KnWwSC\nK4q46wJlJgAUeiHjj16UWu5qCuiHjzJsT/XkkaH45yeSM6rhNCZPUVtJ2G4ehm0k\nHkNY75qfm5YybdDJ1p1LUYCacaY7GG0xqn6RyTQLJJ1/Q4cO8Rg+mf7kLDJ30BDl\nOwIDAQAB\n-----END PUBLIC KEY-----\n",
+                "signature": "3a83e7cbd885cb1d3a03a435c6d470564b26dc755881a711a8e78bd8d0d95afefa2bed0be7a3848a5f6ab76ba73a8b9c71ca5d02484e10f1ce22060db4e312324dfa96abb0f6a647a6fe70f5eeaf196f44ea387e4f793c3c7d89a95a0a8608064c67cf95fd05206a6ab8e1c88083ee32a1480f872d5ad82f4bdbf5b14b5eeeb0de9048dcc339ff7c56d6808dc184beff836dba3f9f30c3e1bb4ad11584cb7f2a7c1d7b961906c354372c7a9480fee7b1c77fe63eba6f04b1ea7c5ac4767363e6d4f0ab407ba865ff4b799f346538dd03a91d1afbcbf32b6cb1cc21ed64dc172f264de85f30f74641564fc432ebdc987acb71e4587810c92ad268086adbebc3e9",
+                "timestamp": "2025-02-06 12:15:00"
+            }
+        ]
+    }
+]

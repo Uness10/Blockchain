@@ -14,7 +14,7 @@ class User {
     string publicKey ; 
 public : 
     User(const string& name) ; 
-
+    User() = default;
     string getName() const ; 
     string getPrivateKey() const ;
     string getPublicKey() const ;

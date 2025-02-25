@@ -1,63 +1,44 @@
 #include <iostream>
+#include <csignal>
+#include <fstream>
 #include "blockchain.h"
 #include <openssl/applink.c>
 
 using namespace std;
 
+void handleSegfault(int signal) {
+    cerr << "Segmentation fault (signal " << signal << ") caught!" << endl;
+    exit(EXIT_FAILURE); 
+}
+
 int main() {
-    cout << "Starting Blockchain Tests...\n" << endl;
+    signal(SIGSEGV, handleSegfault);
 
-    // 🟢 **Creating Users**
-    User alice("Alice");
-    User bob("Bob");
-    User charlie("Charlie");
-    User david("David");
+    Blockchain bch(2, false);
 
-    // 🟢 **Initializing Blockchain**
-    Blockchain myBlockchain(3);
-
-    // 🟢 **Creating Transactions**
-    Transaction tx1(alice, bob, 50.0, "2025-02-06 12:00:00");
-    Transaction tx2(bob, charlie, 30.0, "2025-02-06 12:05:00");
-    Transaction tx3(charlie, david, 20.0, "2025-02-06 12:10:00");
-    Transaction tx4(david, alice, 10.0, "2025-02-06 12:15:00");
-
-    // Sign transactions
-    tx1.signTransaction();
-    tx2.signTransaction();
-    tx3.signTransaction();
-    tx4.signTransaction();
-
-    // 🟢 **Verifying Transactions**
-    if (!tx1.verifySignature() || !tx2.verifySignature() || !tx3.verifySignature() || !tx4.verifySignature()) {
-        cerr << ":(Transaction signature verification failed!" << endl;
+    cout << "Checking file accessibility..." << endl;
+    ifstream file("data/test.json");
+    if (!file.is_open()) {
+        cerr << "Failed to open the file: data/test.json" << endl;
         return 1;
     }
-    cout << ":) All transactions verified successfully!\n" << endl;
+    file.close();
 
-    // 🟢 **Adding Blocks**
-    myBlockchain.addBlock("Block 1");
-    int block1 = myBlockchain.getChain().size() - 1;
-    myBlockchain.addTransactionsToBlock(block1, tx1);
-    myBlockchain.addTransactionsToBlock(block1, tx2);
+    try {
+        cout << "Importing blockchain from JSON..." << endl;
+        bch.importFromJSON("data/test.json");
+        cout << "Import successful!" << endl;
+    } catch (const exception& e) {
+        cerr << "Exception caught during import: " << e.what() << endl;
+        return 1;
+    }
 
-    myBlockchain.addBlock("Block 2");
-    int block2 = myBlockchain.getChain().size() - 1;
-    myBlockchain.addTransactionsToBlock(block2, tx3);
-    myBlockchain.addTransactionsToBlock(block2, tx4);
-
-    // 🟢 **Printing Blockchain**
-    myBlockchain.printChain();
-
-    // 🟢 **Validating Blockchain**
-    if (myBlockchain.isChainValid()) {
+    if (bch.isChainValid()) {
         cout << ":) Blockchain is valid!" << endl;
     } else {
-        cout << ":(Blockchain validation failed!" << endl;
+        cout << ":( Blockchain validation failed!" << endl;
         return 1;
     }
-
-
 
     cout << "Sbe3 ! " << endl;
     return 0;

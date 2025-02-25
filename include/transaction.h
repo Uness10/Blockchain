@@ -8,30 +8,29 @@
 #include <iomanip>
 
 #include "crypto.h"
-#include "user.h"
-
+#include "signer.h"
 using namespace std;
 
 class Transaction {
 private:
-    const User sender;      // Sender's user reference
-    const User recipient;   // Recipient's user reference
+    const string spk;      // Sender's public key 
+    const string rpk;   // Recipient's public key
     double amount;           // Transaction amount
     string timestamp;        // Transaction timestamp
     string hash;
     string signature; 
 
     // Private constructor for internal use
-    Transaction(const User& sender, const User& recipient, 
+    Transaction(const string& sender, const string& recipient, 
                 double amount, const string& timestamp, const string& signature);
 
 public:
     // Constructor for creating a new transaction
-    Transaction(const User& sender, const User& recipient, 
+    Transaction(const string& sender, const string& recipient, 
                 double amount, const string& timestamp);
 
     // Adapt an existing transaction from JSON data
-    static Transaction adapt(const User& sender, const User& recipient, 
+    static Transaction adapt(const string& sender, const string& recipient, 
                              double amount, const string& timestamp, 
                              const string& signature);
 
