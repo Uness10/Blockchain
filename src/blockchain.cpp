@@ -63,7 +63,7 @@ void Blockchain::addTransactionsToBlock(int idx, Transaction& tx) {
 
 
 bool Blockchain::isChainValid() const {
-    for (size_t i = 1; i < chain.size(); i++) {
+    for (size_t i = 1; i < chain.size()-1; i++) {
         const Block& currentBlock = chain[i];
         const Block& previousBlock = chain[i - 1];
 
@@ -134,7 +134,7 @@ void Blockchain::importFromJSON(const string& fname) {
     for (const auto& blockJ : data) {
         static const vector<string> blockFields = 
             {"index", "data", "previousHash", "nonce", "hash", "timestamp", "transactions"};
-        
+
         for (const auto& field : blockFields) {
             if (!blockJ.contains(field)) {
                 throw InvalidFormatException("Missing '" + field + "' field in Block " +

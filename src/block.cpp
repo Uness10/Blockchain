@@ -54,7 +54,7 @@ bool Block::validateBlock() const {
     }
 
     for (const auto& tx : transactions) {
-        if (!tx.verifySignature()) {  // ✅ Uses sender's public key internally
+        if (!tx.verifySignature()) { 
             return false;
         }
     }
@@ -64,7 +64,8 @@ bool Block::validateBlock() const {
 
 void Block::addTransaction(const Transaction& tx) {
     transactions.push_back(tx);
-    hash = this->calculateHash();
+    hash = calculateHash();
+
 }
 
 // Getters
