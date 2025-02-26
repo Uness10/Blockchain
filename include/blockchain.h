@@ -34,8 +34,6 @@ public:
     void exportToJSON(const std::string& fname);
     void importFromJSON(const std::string& fname);
 
-    void exportToCSV(const std::string& fname);
-    void importFromCSV(const std::string& fname);
 
     Block getBlock(int idx)  const  ; 
     vector<Block> getChain() const ;
