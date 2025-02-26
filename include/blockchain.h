@@ -22,7 +22,8 @@ private:
 
 
 public:
-    Blockchain(int diff, bool init = true);
+    Blockchain(int diff);
+    Blockchain();
     ~Blockchain();
 
     void addBlock(const std::string& data);

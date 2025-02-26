@@ -5,14 +5,28 @@ using namespace std;
 using json = nlohmann::json;
 using namespace BCE;
 
-Blockchain::Blockchain(int diff, bool init) : difficulty(diff) {
+int calculateDifficulty(const vector<Block>& chain ){
+    int diff = INT_MAX ; 
+    for(const Block& b: chain){
+        int i = 0 ; 
+        string bHash = b.getHash();
+        while(bHash[i]=='0' && i<bHash.size())
+            i++; 
+        diff = min(diff,i);
+    }
+    return diff; 
+}
+
+Blockchain::Blockchain(int diff) : difficulty(diff) {
     logger = new Logger();
-    if (init) {
         Block genesisBlock(0, "Genesis Block", "0");
         genesisBlock.mineBlock(difficulty);
         chain.push_back(genesisBlock);
         logger->log("Genesis block created.");
-    }
+}
+Blockchain::Blockchain() {
+    logger = new Logger();
+
 }
 
 Blockchain::~Blockchain() {
@@ -43,6 +57,7 @@ void Blockchain::addBlock(const string& data) {
     logger->log("Block added to Blockchain. Current length : "+ to_string(newBlock.getIndex()));
     // logger->log("Block mined: " + hash + " - After " + to_string(nonce) + " attempts");
 }
+
 void Blockchain::addTransactionsToBlock(int idx, Transaction& tx) {
     if (idx < 0 || idx >= chain.size()) {
         throw InvalidDataException("Block index out of range.");
@@ -180,7 +195,7 @@ void Blockchain::importFromJSON(const string& fname) {
         tempChain.push_back(b);
     }
 
-
+    difficulty = calculateDifficulty(tempChain);
 
     chain = move(tempChain);
     if (!isChainValid()) {
@@ -189,84 +204,8 @@ void Blockchain::importFromJSON(const string& fname) {
     if (logger) logger->log("Blockchain successfully imported from " + fname);
 }
 
+
+
+
 Block Blockchain::getBlock(int idx)  const  { return chain[idx]; }
 vector<Block> Blockchain::getChain() const { return chain;} 
-
-
-void Blockchain::exportToCSV(const string& fname) {
-    ofstream file(fname);
-    if (!file.is_open()) {
-        throw FileException("Failed to open file: " + fname);
-    }
-
-    file << "Index,Timestamp,Data,Previous Hash,Hash,Nonce\n";
-
-    for (const Block& b : chain) {
-        file << b.getIndex() << ","
-             << "\"" << b.getTimestamp() << "\","
-             << "\"" << b.getData() << "\","
-             << b.getPreviousHash() << ","
-             << b.getHash() << ","
-             << b.getNonce() << "\n";
-    }
-
-    file.close();
-    logger->log("Blockchain exported to " + fname);
-}
-
-void Blockchain::importFromCSV(const string& fname) {
-    ifstream file(fname);
-    if (!file.is_open()) {
-        throw FileException("Failed to open file: " + fname);
-    }
-
-    chain.clear(); 
-
-    string line;
-    getline(file, line);  // Skip the header
-    int i = 2;  // Line count starts from 2 due to header
-    while (getline(file, line)) {
-        stringstream ss(line);
-        string indexStr, timestamp, data, previousHash, hash, nonceStr;
-
-        if (!getline(ss, indexStr, ',') || 
-            !getline(ss, timestamp, ',') || 
-            !getline(ss, data, ',') || 
-            !getline(ss, previousHash, ',') || 
-            !getline(ss, hash, ',') || 
-            !getline(ss, nonceStr, ',')) {
-            throw InvalidFormatException("In CSV data - Missing required fields in line: " + to_string(i));
-        }
-
-        timestamp = timestamp.substr(1, timestamp.size() - 2);
-        data = data.substr(1, data.size() - 2);
-
-        int index = 0;
-        long long nonce = 0;
-        try {
-            index = stoi(indexStr);
-            nonce = stoll(nonceStr);
-        } catch (const invalid_argument& e) {
-            throw InvalidFormatException("In CSV data - Invalid number format in line: " + to_string(i));
-        } catch (const out_of_range& e) {
-            throw InvalidFormatException("In CSV data - Number out of range in line: " + to_string(i));
-        }
-        vector<Transaction> txs = {};
-        Block b = Block::adapt(index, timestamp, data, previousHash, hash, txs, nonce);
-        if (!b.validateBlock()) {
-            throw InvalidBlockException("In CSV data - Hash mismatch at block " + indexStr);
-        }
-
-        chain.push_back(b);
-        i++;
-    }
-
-    file.close();
-    logger->log("Blockchain imported from " + fname);
-
-    if (!isChainValid()) {
-        throw InvalidBlockchainException("Imported blockchain is invalid!");
-    }
-}
-
-

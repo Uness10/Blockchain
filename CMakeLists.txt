@@ -27,7 +27,8 @@ add_executable(blockchain
     src/block.cpp
     src/crypto.cpp
     src/transaction.cpp
-    SRC/user.cpp
+    src/user.cpp
+    src/test.cpp
 )
 
 # Link libraries
